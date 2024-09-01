@@ -1,0 +1,18 @@
+/* Подключение шрифтоф */
+@font-face {
+	font-family: Inter;
+	font-weight: 400; /* Соответствует значению normal */
+	src: url('../fonts/Inter-Regular.ttf');
+}
+
+@font-face {
+	font-family: Inter;
+	font-weight: 500; /* Соответствует значению bold */
+	src: url('../fonts/Inter-SemiBold.ttf');
+}
+
+@font-face {
+	font-family: Inter;
+	font-weight: 900; /* Соответствует значению bold */
+	src: url('../fonts/Inter-Black.ttf');
+}

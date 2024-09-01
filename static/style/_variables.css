@@ -1,0 +1,33 @@
+/* ПАЛИТРА */
+:root {
+	--black: #000;
+	--dark: #333232;
+	--white: #fff;
+	--red: #da2727;
+	--blue: #007be4;
+	--yellow: #ffd000;
+	--bg-blur: #222222b0;
+	--bg: #333;
+	--bg-sec: #333438;
+	--bg-panel: #66666a;
+	--bg-panel-dark: #525254;
+	--text: #f5f5f5;
+	--shadow: #a19999;
+	--green: #06a734;
+	--active: #da2727;
+	--hover: #ffd000;
+	--transition: all 0.2s ease;
+}
+
+/* Стиль для тёмной темы */
+:root .dark {
+	--bg: #fbfbfb;
+	--bg-sec: #ddd;
+	--bg-panel: #afafaf;
+	--bg-panel-dark: #999;
+	--text: #222;
+	--shadow: #4e5a64;
+	--green: #4cc727;
+	--active: #f04800;
+	--hover: #4c00ff;
+}
