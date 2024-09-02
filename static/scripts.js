@@ -27,7 +27,7 @@ for (let el of col_buts) {
 
 setInterval(() => {
 	getData();
-}, 700);
+}, 400);
 
 // Функция выбора сортировки
 function chooseSort(e, colName) {
@@ -69,16 +69,15 @@ async function getData() {
 // Функция отрисовки тела таблицы
 function drawTBody(res) {
 	tbody.innerHTML = '';
+	let y = [];
 	for (let i = 1; i < res.length; i++) {
 		let tr = document.createElement('tr');
-		tr.classList.add('tr');
 
 		let str = res[i].trim().split(/\s+/g);
 
-		if (i < 302) {
+		if (i < 33) {
 			for (let k = 0; k < conf.columns.length; k++) {
 				let td = document.createElement('td');
-				td.classList.add('td');
 				td.innerText = str[k];
 				tr.append(td);
 			}
@@ -95,7 +94,6 @@ function drawTHead(res) {
 
 	for (let p of res) {
 		let th = document.createElement('th');
-		th.classList.add('th');
 		th.innerText = p.toUpperCase();
 		th.onclick = e => chooseSort(e, p.toLowerCase());
 		if (p == conf.sort) {

@@ -1,0 +1,35 @@
+.bottom {
+	width: 100%;
+	/* flex-grow: 1; */
+	display: flex;
+	align-items: center;
+	padding-block: 0.5rem;
+	padding-inline: 1rem;
+	gap: 1rem;
+	background: var(--bg);
+}
+
+.bottom button {
+	background: transparent;
+	color: var(--shadow);
+	font-size: 1rem;
+	padding-inline: 0.5rem;
+}
+
+.bottom button:hover {
+	color: var(--hover);
+}
+
+/* .bottom button:active {
+	color: var(--active) !important;
+} */
+
+.active {
+	background: var(--green) !important;
+	color: var(--black) !important;
+}
+
+.active:hover {
+	/* background: var(--bg) !important; */
+	color: var(--hover) !important;
+}

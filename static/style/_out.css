@@ -3,39 +3,54 @@
 	height: 100%;
 	overflow: auto;
 	border: 1px solid var(--shadow);
-	background: var(--bg);
+	/* background: var(--bg); */
 	font-size: 0.9rem;
-	padding: 0.2rem;
+	/* padding: 0.2rem; */
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	position: relative;
+	gap: 0.5rem;
 }
 
-.table,
-.thead,
-.tbody,
-.tr,
-.th,
-.td {
+.wrap {
+	width: 100%;
+	height: fit-content;
+	overflow: auto;
+}
+
+.out table {
+	background: var(--bg);
+}
+
+.out table,
+.out thead,
+.out tbody,
+.out tr,
+.out th,
+.out td {
 	border: 1px solid var(--shadow);
 	border-collapse: collapse;
 	padding: 0.1rem;
 }
 
-.th {
+.out th {
 	min-width: 5rem;
 	cursor: pointer;
 }
 
-.td {
+.out td {
 	min-width: 5rem;
 	cursor: pointer;
 }
 
-.th:hover,
-.td:hover {
+.out th:hover,
+.out td:hover {
 	background: var(--green) !important;
 	color: var(--black);
 }
 
-.tr:hover .td {
+.out tr:hover td {
 	background: var(--shadow);
 	color: var(--black);
 }
