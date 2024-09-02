@@ -1,19 +1,26 @@
 package main
 
 import (
+	"encoding/json"
 	"html/template"
+	"io"
 	"log"
 	"net/http"
 	"os/exec"
 	"path/filepath"
 )
 
+type WtopData struct {
+	Srot    string   `json:"sort"`
+	Columns []string `json:"columns"`
+}
+
 var coms = []string{"ps",
 	"-eo",
 	// "pid,ppid,uid,user,ruid,ruser,suid,gid,group,pgrp,tty,tpgid,sid,ni,%cpu,time,%mem,s,command,wchan,flags,tgid,environ,lxc,exe,rss,pss,uss,cuu,cuc",
 	"pid,user,%mem,cuu,cuc,gid,group,pgrp,tty,time,s,wchan,flags,tgid,environ,lxc",
 	"--sort",
-	"user",
+	"pid",
 }
 
 func main() {
@@ -80,6 +87,33 @@ func home(w http.ResponseWriter, r *http.Request) {
 }
 
 func api(w http.ResponseWriter, r *http.Request) {
+
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		log.Println(err.Error())
+	}
+
+	var wtd WtopData
+	log.Println(string(body))
+	err = json.Unmarshal(body, &wtd)
+	if err != nil {
+		log.Println(err.Error())
+	}
+	log.Println(&wtd)
+	res := ""
+	for i, v := range wtd.Columns {
+		if i != 0 {
+			res += "," + v
+		} else {
+			res += v
+		}
+	}
+	coms[2] = res
+
+	if wtd.Srot != "" {
+		coms[4] = wtd.Srot
+	}
+	// coms[4] = "pid"
 
 	result, _ := execCommand(coms)
 
