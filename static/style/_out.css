@@ -7,27 +7,34 @@
 	padding: 0.2rem;
 }
 
-.out table,
-.out tr,
-.out th,
-.out td {
+.table,
+.thead,
+.tbody,
+.tr,
+.th,
+.td {
 	border: 1px solid var(--shadow);
 	border-collapse: collapse;
 	padding: 0.1rem;
 }
 
-.out th {
+.th {
 	min-width: 5rem;
 	cursor: pointer;
 }
 
-.out th:hover,
-.out td:hover {
+.td {
+	min-width: 5rem;
+	cursor: pointer;
+}
+
+.th:hover,
+.td:hover {
 	background: var(--green) !important;
 	color: var(--black);
 }
 
-.out tr:hover td {
+.tr:hover .td {
 	background: var(--shadow);
 	color: var(--black);
 }

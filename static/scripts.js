@@ -1,21 +1,25 @@
 'use strict';
 // Блоки интерфейса
 const col_buts = document.querySelector('.cols').children;
-const out = document.querySelector('.out');
+// const out = document.querySelector('.out');
+const thead = document.querySelector('.thead');
+const tbody = document.querySelector('.tbody');
 
 // Массив выбранных колонок
-let data = { columns: [], sort: '' };
+let conf = { columns: [], sort: '' };
 
 // Проверка/инициализация хранилища
-if (!localStorage.getItem('webtop-data')) {
-	localStorage.setItem('webtop-data', JSON.stringify({ columns: [], sort: '' }));
+if (!localStorage.getItem('webtop-conf')) {
+	localStorage.setItem('webtop-conf', JSON.stringify({ columns: [], sort: '' }));
 } else {
-	data = JSON.parse(localStorage.getItem('webtop-data'));
-	console.log(data);
+	conf = JSON.parse(localStorage.getItem('webtop-conf'));
+	console.log(conf);
 }
 
+drawTHead(conf.columns);
+
 for (let el of col_buts) {
-	if (data.columns.includes(el.id)) {
+	if (conf.columns.includes(el.id)) {
 		el.classList.add('active');
 	}
 	el.addEventListener('click', chooseColumn);
@@ -23,66 +27,82 @@ for (let el of col_buts) {
 
 setInterval(() => {
 	getData();
-}, 400);
+}, 700);
 
 // Функция выбора сортировки
-function chooseSort(colName) {
+function chooseSort(e, colName) {
 	console.log(colName);
-	for (let el of document.querySelectorAll('hr')) {
+	for (let el of document.querySelectorAll('th')) {
 		el.classList.remove('active');
 	}
+	e.currentTarget.classList.add('active');
 
-	data.sort = colName;
+	conf.sort = colName;
 }
 
 // Функция добавления/удаления колонок
 function chooseColumn(e) {
 	let t = e.currentTarget;
-	if (data.columns.includes(t.id)) {
+	if (conf.columns.includes(t.id)) {
 		t.classList.remove('active');
-		data.columns = data.columns.filter(el => el != t.id);
+		conf.columns = conf.columns.filter(el => el != t.id);
 	} else {
 		t.classList.add('active');
-		data.columns.push(t.id);
+		conf.columns.push(t.id);
 	}
-	console.log(data);
+	console.log(conf.columns);
+	drawTHead(conf.columns);
 }
 
 // Функция запроса данных
 async function getData() {
-	let body = JSON.stringify(data);
-	localStorage.setItem('webtop-data', body);
+	let body = JSON.stringify(conf);
+	localStorage.setItem('webtop-conf', body);
 	let res = await fetch('/api/data', {
 		method: 'POST',
 		body,
 	});
 	res = await res.json();
-	let tab = document.createElement('table');
-	for (let i = 0; i < res.length; i++) {
+	drawTBody(res);
+}
+
+// Функция отрисовки тела таблицы
+function drawTBody(res) {
+	tbody.innerHTML = '';
+	for (let i = 1; i < res.length; i++) {
 		let tr = document.createElement('tr');
+		tr.classList.add('tr');
 
-		let ttt = res[i].trim().split(/\s+/g);
+		let str = res[i].trim().split(/\s+/g);
 
-		if (i == 0) {
-			for (let p of ttt) {
-				let th = document.createElement('th');
-				th.innerText = p;
-				th.onclick = () => chooseSort(p.toLowerCase());
-				if (p == data.sort) {
-					th.classList.add('active');
-				}
-				tr.append(th);
-			}
-		} else if (i < 32) {
-			for (let p of ttt) {
+		if (i < 32) {
+			for (let k = 0; k < conf.columns.length; k++) {
 				let td = document.createElement('td');
-				td.innerText = p;
+				td.classList.add('td');
+				td.innerText = str[k];
 				tr.append(td);
 			}
 		}
 
-		tab.append(tr);
+		tbody.append(tr);
 	}
-	out.innerHTML = '';
-	out.append(tab);
+}
+
+// Функция отрисовки шапки таблицы
+function drawTHead(res) {
+	thead.innerHTML = '';
+	let tr = document.createElement('tr');
+
+	for (let p of res) {
+		let th = document.createElement('th');
+		th.classList.add('th');
+		th.innerText = p.toUpperCase();
+		th.onclick = e => chooseSort(e, p.toLowerCase());
+		if (p == conf.sort) {
+			th.classList.add('active');
+		}
+		tr.append(th);
+	}
+
+	thead.append(tr);
 }
