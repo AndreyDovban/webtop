@@ -2,7 +2,8 @@
 	width: 100%;
 	height: 100%;
 	padding: 0.5rem;
+	background: var(--black);
 	border: 1px solid var(--shadow);
 	display: flex;
-	gap: 1rem;
+	gap: 0.5rem;
 }

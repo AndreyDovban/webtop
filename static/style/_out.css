@@ -3,6 +3,7 @@
 	height: 100%;
 	overflow: auto;
 	border: 1px solid var(--shadow);
+	background: var(--bg);
 	font-size: 0.9rem;
 	padding: 0.2rem;
 }

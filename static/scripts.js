@@ -75,7 +75,7 @@ function drawTBody(res) {
 
 		let str = res[i].trim().split(/\s+/g);
 
-		if (i < 32) {
+		if (i < 302) {
 			for (let k = 0; k < conf.columns.length; k++) {
 				let td = document.createElement('td');
 				td.classList.add('td');

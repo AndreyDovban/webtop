@@ -94,12 +94,10 @@ func api(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var wtd WtopData
-	log.Println(string(body))
 	err = json.Unmarshal(body, &wtd)
 	if err != nil {
 		log.Println(err.Error())
 	}
-	log.Println(&wtd)
 	res := ""
 	for i, v := range wtd.Columns {
 		if i != 0 {
