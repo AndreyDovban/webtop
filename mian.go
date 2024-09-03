@@ -16,6 +16,7 @@ type WtopData struct {
 }
 
 var coms = []string{"ps",
+	"h",
 	"-eo",
 	// "pid,ppid,uid,user,ruid,ruser,suid,gid,group,pgrp,tty,tpgid,sid,ni,%cpu,time,%mem,s,command,wchan,flags,tgid,environ,lxc,exe,rss,pss,uss,cuu,cuc",
 	"pid,user,%mem,cuu,cuc,gid,group,pgrp,tty,time,s,wchan,flags,tgid,environ,lxc",
@@ -106,10 +107,10 @@ func api(w http.ResponseWriter, r *http.Request) {
 			res += v
 		}
 	}
-	coms[2] = res
+	coms[3] = res
 
 	if wtd.Srot != "" {
-		coms[4] = wtd.Srot
+		coms[5] = wtd.Srot
 	}
 	// coms[4] = "pid"
 

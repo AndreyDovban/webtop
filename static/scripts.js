@@ -70,12 +70,12 @@ async function getData() {
 function drawTBody(res) {
 	tbody.innerHTML = '';
 	let y = [];
-	for (let i = 1; i < res.length; i++) {
+	for (let i = 0; i < res.length; i++) {
 		let tr = document.createElement('tr');
 
 		let str = res[i].trim().split(/\s+/g);
 
-		if (i < 32) {
+		if (i < 1000) {
 			for (let k = 0; k < conf.columns.length; k++) {
 				let td = document.createElement('td');
 				td.innerText = str[k];
