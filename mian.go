@@ -28,7 +28,8 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", home)
-	mux.HandleFunc("/api/data", api)
+	mux.HandleFunc("/api/processes", api)
+	mux.HandleFunc("/api/cpumem", cpumem)
 
 	mux.Handle("/static*", http.NotFoundHandler())
 	mux.Handle("/static/", http.StripPrefix("/static", http.FileServer(neuteredFileSystem{http.Dir("./static/")})))
@@ -88,7 +89,6 @@ func home(w http.ResponseWriter, r *http.Request) {
 }
 
 func api(w http.ResponseWriter, r *http.Request) {
-
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		log.Println(err.Error())
@@ -112,25 +112,38 @@ func api(w http.ResponseWriter, r *http.Request) {
 	if wtd.Srot != "" {
 		coms[5] = wtd.Srot
 	}
-	// coms[4] = "pid"
 
-	result, _ := execCommand(coms)
+	executer := exec.Command(coms[0], coms[1:]...)
+	stdout, _ := executer.StdoutPipe()
+	executer.Start()
+
+	h := exec.Command("jq", "-Rn", "[inputs|.]")
+	h.Stdin = stdout
+	result, _ := h.Output()
 
 	w.Write(result)
 }
 
-func execCommand(cmd []string) ([]byte, error) {
-	executer := exec.Command(cmd[0], cmd[1:]...)
+func cpumem(w http.ResponseWriter, r *http.Request) {
+	/**
+		i = idle + iowait
+	b = user + nice + system + irq + softirq + steal
+	t = i + b
+	pcpu = 100% * b / t
+	*/
+
+	executer := exec.Command("cat", "/proc/stat")
 	stdout, _ := executer.StdoutPipe()
 	executer.Start()
 
-	// b := exec.Command("head", "--line=30")
-	// b.Stdin = stdout
-	// stdout2, _ := executer.StdoutPipe()
-	// b.Start()
-
-	h := exec.Command("jq", "-Rn", "[inputs|.]")
+	h := exec.Command("grep", "cpu")
 	h.Stdin = stdout
-	hh, _ := h.Output()
-	return hh, nil
+	// hh, _ := executer.StdoutPipe()
+	result, _ := h.Output()
+
+	// k := exec.Command("jq", "-Rn", "[inputs|.]")
+	// k.Stdin = hh
+	// result, _ := h.Output()
+
+	w.Write(result)
 }

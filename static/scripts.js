@@ -5,6 +5,11 @@ const col_buts = document.querySelector('.cols').children;
 const thead = document.querySelector('.thead');
 const tbody = document.querySelector('.tbody');
 
+// Кнопки нижнего блока
+const help = document.querySelector('#help');
+
+help.onclick = getCpumem;
+
 // Массив выбранных колонок
 let conf = { columns: [], sort: '' };
 
@@ -26,7 +31,7 @@ for (let el of col_buts) {
 }
 
 setInterval(() => {
-	getData();
+	getProcesses();
 }, 400);
 
 // Функция выбора сортировки
@@ -54,16 +59,39 @@ function chooseColumn(e) {
 	drawTHead(conf.columns);
 }
 
-// Функция запроса данных
-async function getData() {
+// Функция запроса данных о процессах
+async function getProcesses() {
 	let body = JSON.stringify(conf);
 	localStorage.setItem('webtop-conf', body);
-	let res = await fetch('/api/data', {
+	let res = await fetch('/api/processes', {
 		method: 'POST',
 		body,
 	});
 	res = await res.json();
 	drawTBody(res);
+}
+
+// Функция запроса информации загрузки каждого процесса
+async function getCpumem() {
+	/**
+	i = idle + iowait
+	b = user + nice + system + irq + softirq + steal
+	t = i + b
+	pcpu = 100% * b / t
+	*/
+	console.clear();
+	let res = await fetch('/api/cpumem');
+	res = await res.text();
+	let arr = res.trim().split('\n');
+	for (let el of arr) {
+		let str = el.split(/\s+/g);
+		// let i = +str[4] + +str[5];
+		let b = +str[1] + +str[2] + +str[3] + +str[4] + +str[5] + +str[6] + +str[7] + +str[8];
+		// let t = i + b;
+		// let pcpu = console.log(pcpu.toFixed(2) + '%');
+		console.log(el);
+		console.log(+str[4] / b / 100);
+	}
 }
 
 // Функция отрисовки тела таблицы
@@ -75,7 +103,7 @@ function drawTBody(res) {
 
 		let str = res[i].trim().split(/\s+/g);
 
-		if (i < 1000) {
+		if (i < 10000) {
 			for (let k = 0; k < conf.columns.length; k++) {
 				let td = document.createElement('td');
 				td.innerText = str[k];
